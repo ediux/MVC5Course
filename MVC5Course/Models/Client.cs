@@ -22,20 +22,27 @@ namespace MVC5Course.Models
             this.Orders = new HashSet<Order>();
         }
     
+        [DisplayName("客戶端識別碼")]
         public int ClientId { get; set; }
         [Required]
-        [StringLength(10,ErrorMessage="First Name 最大只能輸入10個字")]
+        [StringLength(10,ErrorMessage="{0} 最大只能輸入 {1} 個字")]
+        [DisplayName("名")]
         public string FirstName { get; set; }
         [Required]
+        [DisplayName("中間名")]
         [StringLength(10,ErrorMessage="Middle Name 最大只能輸入10個字")]
         public string MiddleName { get; set; }
         [Required]
+        [DisplayName("姓")]
         [StringLength(5, ErrorMessage = "Last Name 最大只能輸入10個字")]
         public string LastName { get; set; }
         [Required]
+        [DisplayName("性別")]
         [RegularExpression("[MF]",ErrorMessage="只能輸入M或F!")]
         public string Gender { get; set; }
+        [DisplayName("生日")]
         public Nullable<System.DateTime> DateOfBirth { get; set; }
+        [DisplayName("信用等級")]
         public Nullable<double> CreditRating { get; set; }
         public string XCode { get; set; }
         public Nullable<int> OccupationId { get; set; }
