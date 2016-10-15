@@ -45,7 +45,7 @@ namespace MVC5Course.Models
         [DisplayFormat(DataFormatString="{0:yyyy-MM-dd}",ApplyFormatInEditMode=true)]
         public Nullable<System.DateTime> DateOfBirth { get; set; }
         [DisplayName("信用等級")]
-        [Range(0,9,ErrorMessage="信用等級僅能 0 到 9",ErrorMessageResourceName="CreditRating", ErrorMessageResourceType=typeof(string))]
+        [Range(0,9,ErrorMessage="信用等級僅能 0 到 9")]
         public Nullable<double> CreditRating { get; set; }
         public string XCode { get; set; }
         public Nullable<int> OccupationId { get; set; }

@@ -17,7 +17,7 @@ namespace MVC5Course.Controllers
         // GET: Clients
         public ActionResult Index(string  search)
         {
-            var clients = db.Clients.Include(c => c.Occupation).OrderBy(o=>o.ClientId).Take(10);
+            var clients = db.Clients.Include(c => c.Occupation).OrderByDescending(o=>o.ClientId).Take(10);
             if (!string.IsNullOrEmpty(search))
             {
                 clients = clients.Where(w => w.FirstName.Contains(search));
