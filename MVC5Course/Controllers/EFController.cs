@@ -54,7 +54,33 @@ namespace MVC5Course.Controllers
             var db = new FabricsEntities();
             var data = db.Products.Find(id);
             data.ProductName += "!";
-            db.SaveChanges();
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                if (ex is System.Data.Entity.Validation.DbEntityValidationException)
+                {
+                    var efException = (System.Data.Entity.Validation.DbEntityValidationException)ex;
+
+                    List<String> _vError = new List<string>();
+
+                    foreach (var EntityErrors in efException.EntityValidationErrors)
+                    {
+                        foreach (var vErrors in EntityErrors.ValidationErrors)
+                        {
+                            _vError.Add(string.Format("{1}:{0}", vErrors.ErrorMessage, vErrors.PropertyName));
+                        }
+                    }
+                    throw new Exception(string.Concat(_vError.ToArray()));
+                }
+                else
+                {
+                    throw ex;
+                }
+
+            }
             return RedirectToAction("Index");
         }
 
