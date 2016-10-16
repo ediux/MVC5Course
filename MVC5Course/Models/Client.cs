@@ -11,8 +11,6 @@ namespace MVC5Course.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.ComponentModel.DataAnnotations;
     
     public partial class Client
     {
@@ -22,30 +20,12 @@ namespace MVC5Course.Models
             this.Orders = new HashSet<Order>();
         }
     
-        [DisplayName("客戶端識別碼")]
         public int ClientId { get; set; }
-        [Required]
-        [StringLength(10,ErrorMessage="{0} 最大只能輸入 {1} 個字")]
-        [DisplayName("名")]
         public string FirstName { get; set; }
-        [Required]
-        [DisplayName("中間名")]
-        [StringLength(10,ErrorMessage="Middle Name 最大只能輸入10個字")]
         public string MiddleName { get; set; }
-        [Required]
-        [DisplayName("姓")]
-        [StringLength(5, ErrorMessage = "Last Name 最大只能輸入10個字")]
         public string LastName { get; set; }
-        [Required]
-        [DisplayName("性別")]
-        [RegularExpression("[MF]",ErrorMessage="只能輸入M或F!")]
         public string Gender { get; set; }
-        [DisplayName("生日")]
-        [DataType( System.ComponentModel.DataAnnotations.DataType.Date)]
-        [DisplayFormat(DataFormatString="{0:yyyy-MM-dd}",ApplyFormatInEditMode=true)]
         public Nullable<System.DateTime> DateOfBirth { get; set; }
-        [DisplayName("信用等級")]
-        [Range(0,9,ErrorMessage="信用等級僅能 0 到 9")]
         public Nullable<double> CreditRating { get; set; }
         public string XCode { get; set; }
         public Nullable<int> OccupationId { get; set; }
