@@ -36,6 +36,7 @@ namespace MVC5Course.Controllers
         {
             var db = new FabricsEntities();
             var data = db.Products.Find(id);
+            db.OrderLines.RemoveRange(data.OrderLines);
             db.Products.Remove(data);
             db.SaveChanges();
             return RedirectToAction("Index");
