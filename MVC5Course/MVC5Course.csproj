@@ -183,6 +183,7 @@
     <Compile Include="Models\Client.cs">
       <DependentUpon>Fabrics.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClientContributionViewModel.cs" />
     <Compile Include="Models\Fabrics.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -213,6 +214,9 @@
       <DependentUpon>Fabrics.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\usp_Fabrics_Result.cs">
+      <DependentUpon>Fabrics.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\usp_GetClientContribution_Result.cs">
       <DependentUpon>Fabrics.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ViewModels\ClientLoginViewModel.cs" />
@@ -310,6 +314,8 @@
     <Content Include="Views\EF\Index.cshtml" />
     <Content Include="Views\EF\Details.cshtml" />
     <Content Include="Views\EF\ClientContribution.cshtml" />
+    <Content Include="Views\EF\ClientContribution2.cshtml" />
+    <Content Include="Views\EF\ClientContribution3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -84,24 +84,61 @@ namespace MVC5Course.Controllers
             return RedirectToAction("Index");
         }
 
+        //public ActionResult Add20Percent()
+        //{
+        //    var db = new FabricsEntities();
+        //    foreach (var item in db.Products)
+        //    {
+        //        if (item.Price.HasValue)
+        //        {
+        //            item.Price = item.Price.Value * 1.2m;
+        //        }
+        //    }
+        //    db.SaveChanges();
+        //    return RedirectToAction("Index");
+        //}
+
+
         public ActionResult Add20Percent()
         {
             var db = new FabricsEntities();
-            foreach (var item in db.Products)
-            {
-                if (item.Price.HasValue)
-                {
-                    item.Price = item.Price.Value * 1.2m;
-                }
-            }
-            db.SaveChanges();
+            db.Database.ExecuteSqlCommand(@"
+                Update dbo.Product
+                Set    Price=Price * 1.2
+            ");
             return RedirectToAction("Index");
         }
+
         public ActionResult ClientContribution()
         {
             var db = new FabricsEntities();
             var data = db.vw_ClientContribution;
             return View(data);
         }
+
+        public ActionResult ClientContribution2(string Search = "Mary")
+        {
+            var db = new FabricsEntities();
+            var data = db.Database.SqlQuery<ClientContributionViewModel>(@"
+	SELECT
+		 c.FirstName,
+		 c.LastName,
+		 (SELECT SUM(o.OrderTotal) 
+		  FROM [dbo].[Order] o 
+		  WHERE o.ClientId = c.ClientId) as OrderTotal
+	FROM 
+		[dbo].[Client] as c
+    WHERE c.FirstName Like @p0
+            ", "%" + Search + "%");
+            return View(data);
+        }
+
+        public ActionResult ClientContribution3(string Keyword = "Mary")
+        {
+            var db = new FabricsEntities();
+            var data = db.usp_GetClientContribution(Keyword);
+            return View(data);
+        }
+
     }
 }
