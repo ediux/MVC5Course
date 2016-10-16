@@ -97,5 +97,11 @@ namespace MVC5Course.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+        public ActionResult ClientContribution()
+        {
+            var db = new FabricsEntities();
+            var data = db.vw_ClientContribution;
+            return View(data);
+        }
     }
 }
