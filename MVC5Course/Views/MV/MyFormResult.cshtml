@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "MyFormResult";
+}
+
+<h2>MyFormResult</h2>
+
+@using MVC5Course.Models.ViewModels
+@{
+    var c = (ClientLoginViewModel)TempData["MyFormData"];
+
+
+}
+
+@if (c != null)
+{
+    @c.FirstName @c.MiddleName @c.LastName
+}
+else{
+    <p>沒東西喔!</p>
+}

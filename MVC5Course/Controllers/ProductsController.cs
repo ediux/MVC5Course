@@ -7,17 +7,24 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MVC5Course.Models;
+using System.Threading.Tasks;
+using System.Data.Entity.Validation;
 
 namespace MVC5Course.Controllers
 {
-    public class ProductsController : Controller
+
+    [HandleError(ExceptionType = typeof(DbEntityValidationException),
+        View = "Error_DbEntityValidationException")]
+    public class ProductsController : BaseController
     {
-        private FabricsEntities db = new FabricsEntities();
+        //private FabricsEntities db = new FabricsEntities();
+
+
 
         // GET: Products
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var data = db.Products.ToList();
+            var data = await db.All().ToListAsync();
             return View(data);
         }
 
@@ -28,7 +35,7 @@ namespace MVC5Course.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = db.Find(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -51,8 +58,8 @@ namespace MVC5Course.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Products.Add(product);
-                db.SaveChanges();
+                db.Add(product);
+                db.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
 
@@ -66,7 +73,7 @@ namespace MVC5Course.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = db.Find(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -83,8 +90,8 @@ namespace MVC5Course.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(product).State = EntityState.Modified;
-                db.SaveChanges();
+                ((FabricsEntities)db.UnitOfWork).Entry(product).State = EntityState.Modified;
+                db.UnitOfWork.Commit();
                 return RedirectToAction("Index");
             }
             return View(product);
@@ -97,7 +104,7 @@ namespace MVC5Course.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = db.Find(id.Value);
             if (product == null)
             {
                 return HttpNotFound();
@@ -105,14 +112,21 @@ namespace MVC5Course.Controllers
             return View(product);
         }
 
+        public async Task<ActionResult> JsonTest()
+        {
+            db.UnitOfWork.LazyLoadingEnabled = false;
+            var result = await db.All().Take(25).ToListAsync();
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
+            Product product = db.Find(id);
+            db.Delete(product);
+
+            db.UnitOfWork.Commit();
             return RedirectToAction("Index");
         }
 
@@ -120,7 +134,7 @@ namespace MVC5Course.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                db.UnitOfWork.Context.Dispose();
             }
             base.Dispose(disposing);
         }

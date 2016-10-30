@@ -16,9 +16,9 @@ namespace MVC5Course.Controllers
         private FabricsEntities db = new FabricsEntities();
 
         // GET: Clients
-        public ActionResult Index(string  search)
+        public ActionResult Index(string search)
         {
-            var clients = db.Clients.Include(c => c.Occupation).OrderByDescending(o=>o.ClientId).Take(10);
+            var clients = db.Clients.Include(c => c.Occupation).OrderByDescending(o => o.ClientId).Take(10);
             if (!string.IsNullOrEmpty(search))
             {
                 clients = clients.Where(w => w.FirstName.Contains(search));
@@ -47,7 +47,7 @@ namespace MVC5Course.Controllers
             ViewBag.OccupationId = new SelectList(db.Occupations, "OccupationId", "OccupationName");
             var client = new Client()
             {
-                 Gender="M"
+                Gender = "M"
             };
             return View(client);
         }
@@ -60,7 +60,7 @@ namespace MVC5Course.Controllers
         [HttpPost]
         public ActionResult Login(ClientLoginViewModel client)
         {
-            return View("LoginResult",client);
+            return View("LoginResult", client);
         }
         // POST: Clients/Create
         // 若要免於過量張貼攻擊，請啟用想要繫結的特定屬性，如需
@@ -101,16 +101,27 @@ namespace MVC5Course.Controllers
         // 詳細資訊，請參閱 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ClientId,FirstName,MiddleName,LastName,Gender,DateOfBirth,CreditRating,XCode,OccupationId,TelephoneNumber,Street1,Street2,City,ZipCode,Longitude,Latitude,Notes")] Client client)
+        public ActionResult Edit(int id, FormCollection collection)
         {
+
             if (ModelState.IsValid)
             {
-                db.Entry(client).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var client = db.Clients.Find(id);
+                if (client != null)
+                {
+                    if (TryUpdateModel(client))
+                    {
+                        db.SaveChanges();
+                        return RedirectToAction("Index");
+                    }
+                }
+                //db.Entry(client).State = EntityState.Modified;
+
+                ViewBag.OccupationId = new SelectList(db.Occupations, "OccupationId", "OccupationName", client.OccupationId);
+                return View(client);
             }
-            ViewBag.OccupationId = new SelectList(db.Occupations, "OccupationId", "OccupationName", client.OccupationId);
-            return View(client);
+
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
         }
 
         // GET: Clients/Delete/5

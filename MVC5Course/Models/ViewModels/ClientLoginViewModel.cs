@@ -7,7 +7,7 @@ using System.Web;
 
 namespace MVC5Course.Models.ViewModels
 {
-    public class ClientLoginViewModel
+    public class ClientLoginViewModel:IValidatableObject
     {
         [Required]
         [StringLength(10, ErrorMessage = "{0} 最大只能輸入 {1} 個字")]
@@ -29,5 +29,14 @@ namespace MVC5Course.Models.ViewModels
         [DataType(System.ComponentModel.DataAnnotations.DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> DateOfBirth { get; set; }
+
+
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (this.Gender != "M"|| this.Gender !="F") {
+                yield return new ValidationResult("性別輸入格是錯誤!",new string[]{ "Gender"});
+            }
+        }
     }
 }
