@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Index";
+    IEnumerable<SelectListItem> cr = ViewBag.CreditRanking;
+    IEnumerable<SelectListItem> g = ViewBag.Gender;
 }
 
 <h2>Index</h2>
@@ -9,11 +11,22 @@
 <form action="" class="form-horizontal">
     <div class="form-group">
         <div class="col-lg-6">
-            <input type="text" name="search" class="form-control col-lg-8" />
-            <div class="col-lg-2">
-                <input type="submit" value="搜尋" class="btn btn-success" />
+            @*<input type="text" name="search" class="form-control col-lg-8" />*@
+            <div class="col-lg-4">
+                @Html.TextBox("search", "", new { @class = "form-control col-lg-8" })
             </div>
-        </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("CreditRanking", cr, "--請選擇等級--", new { @class = "form-control" })
+            </div>
+            <div class="col-lg-4">
+                @Html.DropDownList("Gender", g, "--請選擇性別--", new { @class = "form-control" })
+            </div>
+
+
+                <div class="col-lg-2">
+                    <input type="submit" value="搜尋" class="btn btn-success" />
+                </div>
+            </div>
         
     </div>
 </form>
